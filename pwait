@@ -1,14 +1,20 @@
 #!/bin/bash
 
 # default values
-interval=0.5
 version="0.1"
+interval=0.1
+
+name=
 verbose=
-pid[0]=0
 
 # argument parsing
 while true; do
     case "${1}" in
+        -n|--name)
+            name=1
+            declare -A pid
+            shift
+            ;;
         -v|--verbose)
             verbose=1
             shift
@@ -23,7 +29,7 @@ while true; do
             ;;
         *)
             if [[ -n "${@}" ]]; then
-                pid[${1}]=1
+                pid["${1}"]=1
                 shift
             else
                 break
@@ -34,7 +40,7 @@ done
 
 unset pid[0]
 if [ "${#pid[@]}" -eq 0 ]; then
-    echo "usage: $(basename ${0}) [pid...]" 1>&2
+    echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid...]" 1>&2
     exit 1
 fi
 
@@ -43,13 +49,19 @@ if [ ${verbose} ]; then
     echo "monitoring pids: ${!pid[@]}"
 fi
 
+function remove_pid {
+    unset pid[${1}]
+    if [ ${verbose} ]; then
+        echo "${1} removed."
+    fi
+}
+
 while [ "${#pid[@]}" -ne 0 ]; do
     for id in "${!pid[@]}"; do
-        if [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
-            unset pid[${id}]
-            if [ ${verbose} ]; then
-                echo "${id} removed."
-            fi
+        if [ ! ${name} ] && [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
+            remove_pid ${id}
+        elif [ ${name} ] && [ -z "$(pidof ${id})" ]; then
+            remove_pid ${id}
         fi
     done
     sleep ${interval}
