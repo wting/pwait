@@ -22,9 +22,9 @@ any process.
 
 ## OPTIONS
 
-    -n name                  monitor process based on name rather than pid
+    -n, --name               monitor process based on name rather than pid
 
-    -v verbosity             increase verbosity
+    -v, --verbose            increase verbosity
 
     --version                show version number and exit
 
@@ -34,5 +34,5 @@ proctools, wait
 
 ## LICENSE
 
-Copyright (c) 2013, William Ting. Licensed under BSD 2-clause
+Copyright (c) 2013, William Ting. Licensed under BSD 2-clause:
 <http://opensource.org/licenses/BSD-2-Clause>.
