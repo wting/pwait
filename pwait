@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# default values
+interval=0.5
+version="0.1"
+verbose=
+pid[0]=0
+
+# argument parsing
+while true; do
+    case "${1}" in
+        -v|--verbose)
+            verbose=1
+            shift
+            ;;
+        --version)
+            echo "version ${version}"
+            exit
+            ;;
+        -*|--*)
+            echo "invalid option: ${1}" 1>&2
+            exit 1
+            ;;
+        *)
+            if [[ -n "${@}" ]]; then
+                pid[${1}]=1
+                shift
+            else
+                break
+            fi
+            ;;
+    esac
+done
+
+unset pid[0]
+if [ "${#pid[@]}" -eq 0 ]; then
+    echo "usage: $(basename ${0}) [pid...]" 1>&2
+    exit 1
+fi
+
+# check pids
+if [ ${verbose} ]; then
+    echo "monitoring pids: ${!pid[@]}"
+fi
+
+while [ "${#pid[@]}" -ne 0 ]; do
+    for id in "${!pid[@]}"; do
+        if [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
+            unset pid[${id}]
+            if [ ${verbose} ]; then
+                echo "${id} removed."
+            fi
+        fi
+    done
+    sleep ${interval}
+done
+
+exit
