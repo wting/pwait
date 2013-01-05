@@ -22,6 +22,8 @@ any process.
 
 ## OPTIONS
 
+    -i, --interval           set watch interval in seconds (default: 0.1)
+
     -n, --name               watch process based on exact name rather than pid
 
     -v, --verbose            increase verbosity

@@ -28,7 +28,7 @@ b0=`tput sgr0`
 
 # default values
 version="0.1"
-interval=0.1
+interval="0.1s"
 
 name=
 verbose=
@@ -36,6 +36,10 @@ verbose=
 # argument parsing
 while true; do
     case "${1}" in
+        -i|--interval)
+            interval=${2}
+            shift 2
+            ;;
         -n|--name)
             name=1
             declare -A pid
@@ -93,13 +97,11 @@ function remove_pid {
 }
 
 if [[ ${verbose} -gt 0 ]]; then
+    echo "${b1}interval : ${interval}${b0}"
     display_pids
 fi
 
 while [[ "${#pid[@]}" -ne 0 ]]; do
-    if [[ ${verbose} -gt 1 ]]; then
-        display_pids
-    fi
     for id in "${!pid[@]}"; do
         if [ ! ${name} ] && [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
@@ -107,7 +109,15 @@ while [[ "${#pid[@]}" -ne 0 ]]; do
             remove_pid ${id}
         fi
     done
+
+    if [[ "${#pid[@]}" -eq 0 ]]; then
+        break
+    fi
+
     sleep ${interval}
+    if [[ ${verbose} -gt 1 ]]; then
+        display_pids
+    fi
 done
 
 exit
