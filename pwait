@@ -27,7 +27,7 @@ b1=`tput bold`
 b0=`tput sgr0`
 
 # default values
-version="0.1"
+version="0.3.1"
 interval="0.1s"
 
 name=
@@ -82,7 +82,7 @@ fi
 function display_pids {
     if [ ${name} ]; then
         for id in "${!pid[@]}"; do
-            echo "watching [${id}]: $(pidof ${id})"
+            echo "watching [${id}]: $(pidof ${id} 2>/dev/null)"
         done
     else
         echo "watching : ${!pid[@]}"
