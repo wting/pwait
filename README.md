@@ -22,9 +22,11 @@ any process.
 
 ## OPTIONS
 
-    -n, --name               monitor process based on name rather than pid
+    -n, --name               watch process based on exact name rather than pid
 
     -v, --verbose            increase verbosity
+
+    -vv                      increase verbosity more
 
     --version                show version number and exit
 
