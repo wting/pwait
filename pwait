@@ -70,7 +70,13 @@ fi
 
 # check pids
 if [ ${verbose} ]; then
-    echo "monitoring pids: ${!pid[@]}"
+    if [ ${name} ]; then
+        for id in "${!pid[@]}"; do
+            echo "monitoring [${id}]: $(pidof ${id})"
+        done
+    else
+        echo "monitoring pids: ${!pid[@]}"
+    fi
 fi
 
 function remove_pid {
