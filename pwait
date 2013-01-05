@@ -43,6 +43,10 @@ while true; do
             verbose=1
             shift
             ;;
+        -vv)
+            verbose=2
+            shift
+            ;;
         --version)
             echo "version ${version}"
             exit
@@ -69,15 +73,15 @@ if [ "${#pid[@]}" -eq 0 ]; then
 fi
 
 # check pids
-if [ ${verbose} ]; then
+function display_pids {
     if [ ${name} ]; then
         for id in "${!pid[@]}"; do
-            echo "monitoring [${id}]: $(pidof ${id})"
+            echo "watching [${id}]: $(pidof ${id})"
         done
     else
-        echo "monitoring pids: ${!pid[@]}"
+        echo "watching: ${!pid[@]}"
     fi
-fi
+}
 
 function remove_pid {
     unset pid[${1}]
@@ -85,6 +89,10 @@ function remove_pid {
         echo "${1} removed."
     fi
 }
+
+if [ ${verbose} -gt 0 ]; then
+    display_pids
+fi
 
 while [ "${#pid[@]}" -ne 0 ]; do
     for id in "${!pid[@]}"; do
@@ -94,6 +102,9 @@ while [ "${#pid[@]}" -ne 0 ]; do
             remove_pid ${id}
         fi
     done
+    if [ ${verbose} -gt 1 ]; then
+        display_pids
+    fi
     sleep ${interval}
 done
 
