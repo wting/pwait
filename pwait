@@ -101,7 +101,7 @@ if [[ ${verbose} -gt 0 ]]; then
     display_pids
 fi
 
-while [[ "${#pid[@]}" -ne 0 ]]; do
+while true; do
     for id in "${!pid[@]}"; do
         if [ ! ${name} ] && [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
