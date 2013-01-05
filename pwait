@@ -27,7 +27,7 @@ b1=`tput bold`
 b0=`tput sgr0`
 
 # default values
-version="0.3.1"
+version="0.3.2"
 interval="0.1s"
 
 name=

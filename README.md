@@ -32,6 +32,20 @@ any process.
 
     --version                show version number and exit
 
+## INSTALLATION
+
+- download [pwait](https://github.com/wting/pwait/raw/master/pwait)
+
+        $ wget https://github.com/wting/pwait/raw/master/pwait
+
+- make it executable
+
+        $ chmod +x ./pwait
+
+- move it to a folder in `$PATH`
+
+        $ mv ./pwait ~/bin/
+
 ## RELATED
 
 proctools, wait
