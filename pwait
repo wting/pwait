@@ -114,10 +114,10 @@ while true; do
         break
     fi
 
-    sleep ${interval}
     if [[ ${verbose} -gt 1 ]]; then
         display_pids
     fi
+    sleep ${interval}
 done
 
 exit
