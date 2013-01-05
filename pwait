@@ -87,17 +87,17 @@ function display_pids {
 
 function remove_pid {
     unset pid[${1}]
-    if [ ${verbose} ]; then
+    if [[ ${verbose} -gt 0 ]]; then
         echo "${b1}removed  : ${1}${b0}"
     fi
 }
 
-if [ ${verbose} -gt 0 ]; then
+if [[ ${verbose} -gt 0 ]]; then
     display_pids
 fi
 
-while [ "${#pid[@]}" -ne 0 ]; do
-    if [ ${verbose} -gt 1 ]; then
+while [[ "${#pid[@]}" -ne 0 ]]; do
+    if [[ ${verbose} -gt 1 ]]; then
         display_pids
     fi
     for id in "${!pid[@]}"; do
