@@ -23,15 +23,22 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-b1=`tput bold`
-b0=`tput sgr0`
-
 # default values
 version="0.3.3"
 interval="0.1s"
 
 name=
 verbose=
+
+# output formatting
+b1=`tput bold`
+b0=`tput sgr0`
+
+# assertions
+if [ -z "$(command -v ps)" ]; then
+    echo "pwait requires ps to be in \$PATH"
+    exit 1
+fi
 
 # argument parsing
 while true; do
