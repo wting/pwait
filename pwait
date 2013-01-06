@@ -80,7 +80,7 @@ while true; do
 done
 
 unset pid[0]
-if [ "${#pid[@]}" -eq 0 ]; then
+if ! (( ${#pid[@]} )); then
     echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid...]" 1>&2
     exit 1
 fi
@@ -98,12 +98,12 @@ function display_pids {
 
 function remove_pid {
     unset pid[${1}]
-    if [[ ${verbose} -gt 0 ]]; then
+    if (( verbose )); then
         echo "${b1}removed  : ${1}${b0}"
     fi
 }
 
-if [[ ${verbose} -gt 0 ]]; then
+if (( verbose )); then
     echo "${b1}interval : ${interval}${b0}"
     display_pids
 fi
@@ -117,11 +117,9 @@ while true; do
         fi
     done
 
-    if [[ "${#pid[@]}" -eq 0 ]]; then
-        break
-    fi
+    (( ${#pid[@]} )) || break
 
-    if [[ ${verbose} -gt 1 ]]; then
+    if (( verbose > 1 )); then
         display_pids
     fi
     sleep ${interval}
