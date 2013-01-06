@@ -120,7 +120,7 @@ while true; do
     for id in "${!pid[@]}"; do
         if [ ! ${name} ] && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
-        elif [ ${name} ] && [ -z "$(ps --no-headers -C ${id})" ]; then
+        elif [ ${name} ] && ! ps -C "${id}" >/dev/null 2>&1; then
             remove_pid ${id}
         fi
     done
