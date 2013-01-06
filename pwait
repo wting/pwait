@@ -25,7 +25,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # default values
-version="0.4.2"
+version="0.4.3"
 interval="0.1s"
 
 name=0
@@ -72,10 +72,7 @@ while true; do
         *)
             if [[ -n "${@}" ]]; then
                 # test if argument is a number
-                if [ ${1} -eq ${1} 2>/dev/null ]; then
-                    pids["${1}"]=1
-                    shift
-                elif ! (( name )); then
+                if ! (( name )) && ! [ ${1} -eq ${1} 2>/dev/null ]; then
                     set -- "--name" "${@}"
                 else
                     pids["${1}"]=1
@@ -119,9 +116,9 @@ fi
 
 while true; do
     for id in ${!pids[@]}; do
-        if [ ! ${name} ] && [ ! -e "/proc/${id}" ]; then
+        if ! (( name )) && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
-        elif [ ${name} ] && ! ps -C "${id}" >/dev/null 2>&1; then
+        elif (( name )) && ! ps -C "${id}" >/dev/null 2>&1; then
             remove_pid ${id}
         fi
     done
