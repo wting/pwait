@@ -37,7 +37,7 @@ b0=`tput sgr0`
 
 # assertions
 if [ -z "$(command -v ps)" ]; then
-    echo "pwait requires ps to be in \$PATH"
+    echo "pwait requires ps to be in \$PATH" 1>&2
     exit 1
 fi
 
@@ -87,7 +87,7 @@ done
 
 unset pids[0]
 if ! (( ${#pids[@]} )); then
-    echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid or process_name...]"
+    echo "usage: ${0##*/} [-n|--name] [-v|--verbose] [pid or process_name...]" 1>&2
     exit 1
 fi
 
