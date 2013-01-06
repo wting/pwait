@@ -26,7 +26,7 @@ any process.
 
 ## OPTIONS
 
-    -i, --interval           set watch interval in seconds (default: 0.1s)
+    -i, --interval           set watch interval in seconds (default: 0.5 sec)
 
     -n, --name               watch process based on exact name rather than pid
 
