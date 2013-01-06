@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # default values
-version="0.4.0"
+version="0.4.1"
 interval="0.1s"
 
 name=
@@ -106,12 +106,12 @@ function display_pids {
 
 function remove_pid {
     unset pid[${1}]
-    if [[ ${verbose} -gt 0 ]]; then
+    if (( verbose )); then
         echo "${b1}removed  : ${1}${b0}"
     fi
 }
 
-if [[ ${verbose} -gt 0 ]]; then
+if (( verbose )); then
     echo "${b1}interval : ${interval}${b0}"
     display_pids
 fi
@@ -125,11 +125,9 @@ while true; do
         fi
     done
 
-    if [[ "${#pid[@]}" -eq 0 ]]; then
-        break
-    fi
+    (( ${#pid[@]} )) || break
 
-    if [[ ${verbose} -gt 1 ]]; then
+    if (( verbose > 1 )); then
         display_pids
     fi
     sleep ${interval}
