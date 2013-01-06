@@ -3,6 +3,7 @@
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
+
 # modification, are permitted provided that the following conditions are met:
 #
 # - Redistributions of source code must retain the above copyright notice, this
@@ -24,11 +25,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # default values
-version="0.4.1"
+version="0.4.2"
 interval="0.1s"
 
-name=
-verbose=
+name=0
+verbose=0
 
 # output formatting
 b1=`tput bold`
@@ -49,7 +50,7 @@ while true; do
             ;;
         -n|--name)
             name=1
-            declare -A pid
+            declare -A pids
             shift
             ;;
         -v|--verbose)
@@ -72,12 +73,12 @@ while true; do
             if [[ -n "${@}" ]]; then
                 # test if argument is a number
                 if [ ${1} -eq ${1} 2>/dev/null ]; then
-                    pid["${1}"]=1
+                    pids["${1}"]=1
                     shift
-                elif [ ! ${name} ]; then
+                elif ! (( name )); then
                     set -- "--name" "${@}"
                 else
-                    pid["${1}"]=1
+                    pids["${1}"]=1
                     shift
                 fi
             else
@@ -87,25 +88,25 @@ while true; do
     esac
 done
 
-unset pid[0]
-if [ "${#pid[@]}" -eq 0 ]; then
+unset pids[0]
+if ! (( ${#pids[@]} )); then
     echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid or process_name...]"
     exit 1
 fi
 
 # check pids
 function display_pids {
-    if [ ${name} ]; then
-        for id in "${!pid[@]}"; do
+    if (( name )); then
+        for id in ${!pids[@]}; do
             echo "watching [${id}]: $(pidof ${id} 2>/dev/null)"
         done
     else
-        echo "watching : ${!pid[@]}"
+        echo "watching : ${!pids[@]}"
     fi
 }
 
 function remove_pid {
-    unset pid[${1}]
+    unset pids[${1}]
     if (( verbose )); then
         echo "${b1}removed  : ${1}${b0}"
     fi
@@ -117,7 +118,7 @@ if (( verbose )); then
 fi
 
 while true; do
-    for id in "${!pid[@]}"; do
+    for id in ${!pids[@]}; do
         if [ ! ${name} ] && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
         elif [ ${name} ] && ! ps -C "${id}" >/dev/null 2>&1; then
@@ -125,11 +126,14 @@ while true; do
         fi
     done
 
-    (( ${#pid[@]} )) || break
+    if ! (( ${#pids[@]} )); then
+        break
+    fi
 
     if (( verbose > 1 )); then
         display_pids
     fi
+
     sleep ${interval}
 done
 

@@ -10,9 +10,9 @@ pwait - await process completion
 
 `pwait` waits until all arguments have terminated.
 
-If a number is passed, `pwait` assumes it is a pid. Otherwise it is
+If a number is passed `pwait` assumes it is a pid; otherwise it is
 handled as a process name. To wait for a process--not a pid--called "123" use the
---name option.
+`--name` option.
 
 If `pwait` was passed a *process_name* or invoked using the `--name` option,
 `pwait` waits until all processes matching *process_name* have terminated,
