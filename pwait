@@ -27,7 +27,7 @@ b1=`tput bold`
 b0=`tput sgr0`
 
 # default values
-version="0.3.2"
+version="0.3.3"
 interval="0.1s"
 
 name=
@@ -103,9 +103,9 @@ fi
 
 while true; do
     for id in "${!pid[@]}"; do
-        if [ ! ${name} ] && [ "${pid[${id}]}" -eq 1 ] && [ ! -e "/proc/${id}" ]; then
+        if [ ! ${name} ] && [ ! -e "/proc/${id}" ]; then
             remove_pid ${id}
-        elif [ ${name} ] && [ -z "$(pidof ${id})" ]; then
+        elif [ ${name} ] && [ -z "$(ps --no-headers -C ${id})" ]; then
             remove_pid ${id}
         fi
     done
