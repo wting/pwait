@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # default values
-version="0.3.3"
+version="0.4.0"
 interval="0.1s"
 
 name=
@@ -70,8 +70,16 @@ while true; do
             ;;
         *)
             if [[ -n "${@}" ]]; then
-                pid["${1}"]=1
-                shift
+                # test if argument is a number
+                if [ ${1} -eq ${1} 2>/dev/null ]; then
+                    pid["${1}"]=1
+                    shift
+                elif [ ! ${name} ]; then
+                    set -- "--name" "${@}"
+                else
+                    pid["${1}"]=1
+                    shift
+                fi
             else
                 break
             fi
@@ -81,7 +89,7 @@ done
 
 unset pid[0]
 if [ "${#pid[@]}" -eq 0 ]; then
-    echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid...]" 1>&2
+    echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid or process_name...]"
     exit 1
 fi
 
