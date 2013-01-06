@@ -81,7 +81,7 @@ done
 
 unset pid[0]
 if [ "${#pid[@]}" -eq 0 ]; then
-    echo "usage: $(basename ${0}) [-n|--name] [-v|--verbose] [pid...]" 1>&2
+    echo "usage: ${0##*/} [-n|--name] [-v|--verbose] [pid...]" 1>&2
     exit 1
 fi
 
