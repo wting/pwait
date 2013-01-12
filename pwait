@@ -25,15 +25,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # default values
-version="0.4.3"
+version="0.4.4"
 interval=0.5
 
 name=0
 verbose=0
 
 # output formatting
-b1=`tput bold`
-b0=`tput sgr0`
+b1=
+b0=
+if [ "${TERM}" ]; then
+	b1=`tput bold`
+	b0=`tput sgr0`
+fi
 
 # assertions
 if [ -z "$(command -v ps)" ]; then
